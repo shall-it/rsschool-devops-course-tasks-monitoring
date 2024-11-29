@@ -53,10 +53,10 @@ jobs:
 
       - name: Create a namespace for Prometheus
         run: |
-          kubectl apply -f prometheus-namespace.yaml
+          kubectl apply -f prometheus/prometheus-namespace.yaml
 
       - name: Check if Helm release 'prometheus' exists
-        id: helm_status_app
+        id: helm_status_prom
         run: |
           if helm list --namespace monitoring | grep -q 'prometheus'; then
             echo "::set-output name=exists::true"
@@ -64,14 +64,48 @@ jobs:
             echo "::set-output name=exists::false"
           fi
 
-      - name: Upgrade or Install Helm Chart
+      - name: Upgrade or Install Helm Chart 'prometheus'
         run: |
-          if [ "${{ steps.helm_status_app.outputs.exists }}" == "true" ]; then
-            helm upgrade prometheus bitnami/prometheus --namespace monitoring -f prometheus-values.yaml
+          if [ "${{ steps.helm_status_prom.outputs.exists }}" == "true" ]; then
+            helm upgrade prometheus bitnami/prometheus --namespace monitoring -f prometheus/prometheus-values.yaml
           else
-            helm install prometheus bitnami/prometheus --namespace monitoring -f prometheus-values.yaml
+            helm install prometheus bitnami/prometheus --namespace monitoring -f prometheus/prometheus-values.yaml
           fi
 
-      - name: Getting of public URL
+      - name: Check if Helm release 'node-exporter' exists
+        id: helm_status_node
+        run: |
+          if helm list --namespace monitoring | grep -q 'node-exporter'; then
+            echo "::set-output name=exists::true"
+          else
+            echo "::set-output name=exists::false"
+          fi
+
+      - name: Upgrade or Install Helm Chart 'node-exporter'
+        run: |
+          if [ "${{ steps.helm_status_node.outputs.exists }}" == "true" ]; then
+            helm upgrade node-exporter bitnami/node-exporter --namespace monitoring
+          else
+            helm install node-exporter bitnami/node-exporter --namespace monitoring
+          fi
+
+      - name: Check if Helm release 'kube-state-metrics' exists
+        id: helm_status_kube
+        run: |
+          if helm list --namespace monitoring | grep -q 'kube-state-metrics'; then
+            echo "::set-output name=exists::true"
+          else
+            echo "::set-output name=exists::false"
+          fi
+
+      - name: Upgrade or Install Helm Chart 'kube-state-metrics'
+        run: |
+          if [ "${{ steps.helm_status_kube.outputs.exists }}" == "true" ]; then
+            helm upgrade kube-state-metrics bitnami/kube-state-metrics --namespace monitoring
+          else
+            helm install kube-state-metrics bitnami/kube-state-metrics --namespace monitoring
+          fi
+
+      - name: Getting of Prometheus public URL
         run: |
           kubectl get svc prometheus-server --namespace monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'

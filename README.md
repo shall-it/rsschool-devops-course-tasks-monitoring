@@ -10,9 +10,9 @@ https://github.com/rolling-scopes-school/tasks/blob/master/devops/modules/4_moni
 2. Update Helm repositories:
 `helm repo update`
 3. Create a namespace for Prometheus:
-`kubectl create namespace monitoring`
+`kubectl apply -f prometheus/prometheus-namespace.yaml`
 4. Install Prometheus using Helm and prometheus-values.yaml file from current repository:
-`helm install prometheus bitnami/prometheus --namespace monitoring -f prometheus-values.yaml`
+`helm install prometheus bitnami/prometheus --namespace monitoring -f prometheus/prometheus-values.yaml`
 5. Install Node Exporter (for node-level metrics):
 `helm install node-exporter bitnami/node-exporter --namespace monitoring`
 6. Install Kube State Metrics (for Kubernetes object metrics):
