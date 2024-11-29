@@ -741,7 +741,28 @@ server:
   ## @param server.extraScrapeConfigs Promethus configuration, useful to declare new scrape_configs. This content will be merged with the 'server.configuration' value and stored in the the prometheus.yaml file.
   ## ref: <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config>
   ##
-  extraScrapeConfigs: []
+  # extraScrapeConfigs: []
+  extraScrapeConfigs:
+    - job_name: 'node-exporter'
+      kubernetes_sd_configs:
+        - role: endpoints
+      relabel_configs:
+        - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_name]
+          regex: node-exporter
+          action: keep
+        - source_labels: [__meta_kubernetes_endpoint_port_name]
+          regex: metrics
+          action: keep
+    - job_name: 'kube-state-metrics'
+      kubernetes_sd_configs:
+        - role: endpoints
+      relabel_configs:
+        - source_labels: [__meta_kubernetes_service_label_app_kubernetes_io_name]
+          regex: kube-state-metrics
+          action: keep
+        - source_labels: [__meta_kubernetes_endpoint_port_name]
+          regex: http
+          action: keep
   ## @param server.replicaCount Number of Prometheus replicas to deploy
   ##
   replicaCount: 1
