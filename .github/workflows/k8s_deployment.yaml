@@ -67,9 +67,9 @@ jobs:
       - name: Upgrade or Install Helm Chart
         run: |
           if [ "${{ steps.helm_status_app.outputs.exists }}" == "true" ]; then
-            helm upgrade prometheus prometheus bitnami/prometheus --namespace monitoring -f prometheus-values.yaml
+            helm upgrade prometheus bitnami/prometheus --namespace monitoring -f prometheus-values.yaml
           else
-            helm install prometheus prometheus bitnami/prometheus --namespace monitoring -f prometheus-values.yaml
+            helm install prometheus bitnami/prometheus --namespace monitoring -f prometheus-values.yaml
           fi
 
       - name: Getting of public URL
