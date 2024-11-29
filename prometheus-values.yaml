@@ -1581,7 +1581,7 @@ server:
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
-    sessionAffinity: ClientIP
+    sessionAffinity: None
     ## @param server.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:

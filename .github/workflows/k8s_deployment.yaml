@@ -74,4 +74,4 @@ jobs:
 
       - name: Getting of public URL
         run: |
-          kubectl get svc prometheus-server -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+          kubectl get svc prometheus-server --namespace monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
