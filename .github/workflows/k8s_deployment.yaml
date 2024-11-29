@@ -58,7 +58,7 @@ jobs:
       - name: Check if Helm release 'prometheus' exists
         id: helm_status_app
         run: |
-          if helm list | grep -q 'prometheus'; then
+          if helm list --namespace monitoring | grep -q 'prometheus'; then
             echo "::set-output name=exists::true"
           else
             echo "::set-output name=exists::false"
