@@ -67,9 +67,15 @@ jobs:
       - name: Upgrade or Install Helm Chart 'node-exporter'
         run: |
           if [ "${{ steps.helm_status_node.outputs.exists }}" == "true" ]; then
-            helm upgrade node-exporter bitnami/node-exporter --namespace monitoring
+            helm upgrade node-exporter bitnami/node-exporter --namespace monitoring \
+              --set tolerations[0].key=node-role.kubernetes.io/control-plane \
+              --set tolerations[0].operator=Exists \
+              --set tolerations[0].effect=NoSchedule
           else
-            helm install node-exporter bitnami/node-exporter --namespace monitoring
+            helm install node-exporter bitnami/node-exporter --namespace monitoring \
+              --set tolerations[0].key=node-role.kubernetes.io/control-plane \
+              --set tolerations[0].operator=Exists \
+              --set tolerations[0].effect=NoSchedule
           fi
 
       - name: Check if Helm release 'kube-state-metrics' exists
