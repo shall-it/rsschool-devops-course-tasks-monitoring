@@ -240,7 +240,7 @@ config:
 ## @param dashboardsProvider.configMapName Name of a ConfigMap containing a custom dashboard provider
 ##
 dashboardsProvider:
-  enabled: false
+  enabled: true
   ## Important to set the Path to "/opt/bitnami/grafana/dashboards"
   ## Evaluated as a template.
   ##
@@ -258,7 +258,12 @@ dashboardsProvider:
 ##     folderName: bar
 ##     fileName: myotherdashboard.json
 ##
-dashboardsConfigMaps: []
+# dashboardsConfigMaps: []
+dashboardsConfigMaps:
+  - configMapName: k8s-dashboard
+    fileName: 1860_rev37.json
+  # - configMapName: k8s-dashboard-test
+  #   fileName: 15661_rev1.json
 ## Import datasources from an externally-managed secret, or a secret definition set via Helm values.
 ##
 datasources:
