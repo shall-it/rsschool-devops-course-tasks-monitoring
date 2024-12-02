@@ -1557,11 +1557,11 @@ server:
   service:
     ## @param server.service.type Prometheus service type
     ##
-    type: LoadBalancer
+    type: ClusterIP
     ## @param server.service.ports.http Prometheus service HTTP port
     ##
     ports:
-      http: 80
+      http: 9090
     ## Node ports to expose
     ## @param server.service.nodePorts.http Node port for HTTP
     ## NOTE: choose port between <30000-32767>

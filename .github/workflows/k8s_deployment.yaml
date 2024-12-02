@@ -112,7 +112,16 @@ jobs:
             helm install prometheus bitnami/prometheus --namespace monitoring -f prometheus/prometheus-values.yaml
           fi
 
-      - name: Getting of Prometheus public URL
+      - name: Upgrade or Install Helm Chart 'grafana'
+        run: |
+          helm upgrade --install grafana bitnami/grafana --namespace monitoring -f grafana/grafana-values.yaml
+
+      - name: Getting of Grafana public URL
         run: |
           sleep 30
-          kubectl get svc prometheus-server --namespace monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+          kubectl get svc grafana --namespace monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
+
+      # - name: Getting of Prometheus public URL
+      #   run: |
+      #     sleep 30
+      #     kubectl get svc prometheus-server --namespace monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'

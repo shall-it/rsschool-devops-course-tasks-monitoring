@@ -20,3 +20,13 @@ https://github.com/rolling-scopes-school/tasks/blob/master/devops/modules/4_moni
 
 All these steps are automated with GitHub Actions and allow you to deploy Prometheus and additional tools to K8s cluster by Helm with execution of all required steps before.
 Important notice! Please do not forget to setup GHA credentials which used as environment variables.
+
+### To deploy Grafana locally
+1. Add Bitnami Helm repository:
+`helm repo add bitnami https://charts.bitnami.com/bitnami`
+2. Update Helm repositories:
+`helm repo update`
+3. Create a namespace for Grafana:
+`kubectl apply -f grafana/grafana-namespace.yaml`
+4. Install Grafana using Helm and grafana-values.yaml file from current repository:
+`helm upgrade --install grafana bitnami/grafana --namespace monitoring -f grafana/grafana-values.yaml`
