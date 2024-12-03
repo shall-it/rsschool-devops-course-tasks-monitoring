@@ -30,5 +30,7 @@ Important notice! Please do not forget to setup GHA credentials which used as en
 `kubectl apply -f grafana/grafana-namespace.yaml`
 4. Create configmap with respective dashboard json-file for Grafana:
 `kubectl create configmap k8s-dashboard --from-file=grafana/1860_rev37.json -n monitoring`
-5. Install Grafana using Helm and grafana-values.yaml file from current repository:
+5. Create a separate secret to use it as existing secret for Grafana admin password:
+`kubectl create secret generic grafana-admin-secret -n monitoring --from-literal=password=$(openssl rand -base64 12)`
+6. Install Grafana using Helm and grafana-values.yaml file from current repository:
 `helm upgrade --install grafana bitnami/grafana --namespace monitoring -f grafana/grafana-values.yaml`

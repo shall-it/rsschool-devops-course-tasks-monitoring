@@ -262,8 +262,6 @@ dashboardsProvider:
 dashboardsConfigMaps:
   - configMapName: k8s-dashboard
     fileName: 1860_rev37.json
-  # - configMapName: k8s-dashboard-test
-  #   fileName: 15661_rev1.json
 ## Import datasources from an externally-managed secret, or a secret definition set via Helm values.
 ##
 datasources:
