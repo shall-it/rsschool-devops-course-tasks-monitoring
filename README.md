@@ -28,5 +28,7 @@ Important notice! Please do not forget to setup GHA credentials which used as en
 `helm repo update`
 3. Create a namespace for Grafana:
 `kubectl apply -f grafana/grafana-namespace.yaml`
-4. Install Grafana using Helm and grafana-values.yaml file from current repository:
+4. Create configmap with respective dashboard json-file for Grafana:
+`kubectl create configmap k8s-dashboard --from-file=grafana/1860_rev37.json -n monitoring`
+5. Install Grafana using Helm and grafana-values.yaml file from current repository:
 `helm upgrade --install grafana bitnami/grafana --namespace monitoring -f grafana/grafana-values.yaml`

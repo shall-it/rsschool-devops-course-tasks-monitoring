@@ -53,7 +53,7 @@ jobs:
 
       - name: Create a namespace for Prometheus
         run: |
-          kubectl apply -f prometheus/prometheus-namespace.yaml
+          kubectl apply -f k8s/namespace.yaml
 
       - name: Check if Helm release 'node-exporter' exists
         id: helm_status_node
@@ -114,7 +114,11 @@ jobs:
 
       - name: Create configmap for Grafana dashboard
         run: |
-          kubectl create configmap k8s-dashboard --from-file=grafana/1860_rev37.json -n monitoring
+          if kubectl get configmap k8s-dashboard -n monitoring; then
+            echo "ConfigMap k8s-dashboard exists already"
+          else
+            kubectl create configmap k8s-dashboard --from-file=grafana/1860_rev37.json -n monitoring
+          fi
 
       - name: Upgrade or Install Helm Chart 'grafana'
         run: |
@@ -124,8 +128,3 @@ jobs:
         run: |
           sleep 30
           kubectl get svc grafana --namespace monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
-
-      # - name: Getting of Prometheus public URL
-      #   run: |
-      #     sleep 30
-      #     kubectl get svc prometheus-server --namespace monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}'
