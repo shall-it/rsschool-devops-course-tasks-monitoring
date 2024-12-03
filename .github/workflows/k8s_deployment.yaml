@@ -51,7 +51,7 @@ jobs:
         run: |
           helm repo update
 
-      - name: Create a namespace for Prometheus
+      - name: Create a namespace for Monitoring stack
         run: |
           kubectl apply -f k8s/namespace.yaml
 
@@ -112,12 +112,20 @@ jobs:
             helm install prometheus bitnami/prometheus --namespace monitoring -f prometheus/prometheus-values.yaml
           fi
 
-      - name: Create configmap for Grafana dashboard
+      - name: Get or create configmap for Grafana dashboard
         run: |
           if kubectl get configmap k8s-dashboard -n monitoring; then
             echo "ConfigMap k8s-dashboard exists already"
           else
             kubectl create configmap k8s-dashboard --from-file=grafana/1860_rev37.json -n monitoring
+          fi
+
+      - name: Get or create a separate secret for Grafana password
+        run: |
+          if kubectl get secret grafana-admin-secret -n monitoring; then
+            echo "Secret grafana-admin-secret exists already"
+          else
+            kubectl create secret generic grafana-admin-secret -n monitoring --from-literal=password=$(openssl rand -base64 12)
           fi
 
       - name: Upgrade or Install Helm Chart 'grafana'
