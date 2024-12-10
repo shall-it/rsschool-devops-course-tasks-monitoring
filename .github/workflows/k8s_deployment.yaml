@@ -78,7 +78,7 @@ jobs:
             kubectl create configmap k8s-dashboard --from-file=grafana/1860_rev37.json -n monitoring
           fi
 
-      - name: Get or create configmap for Grafana contact points
+      - name: Get or create configmap for Grafana Contact points and Alert rules
         run: |
           if kubectl get configmap grafana-alerting-config -n monitoring; then
             echo "ConfigMap grafana-smtp-secret exists already"
