@@ -83,7 +83,8 @@ jobs:
           if kubectl get configmap grafana-alerting-config -n monitoring; then
             echo "ConfigMap grafana-smtp-secret exists already"
           else
-            kubectl create configmap grafana-alerting-config --from-file=grafana/contact-points.yaml -n monitoring
+            kubectl create configmap grafana-alerting-config -n monitoring \
+              --from-file=grafana/alerts.yaml
           fi
 
       - name: Get or create a separate secret for Grafana password

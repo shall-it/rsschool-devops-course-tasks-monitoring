@@ -288,6 +288,7 @@ datasources:
       url: http://prometheus-server.monitoring.svc.cluster.local:9090
       access: proxy
       isDefault: true
+      uid: prometheus
 ## Create notifiers from a configMap
 ## The notifiersName must contain the files
 ## @param notifiers.configMapName Name of a ConfigMap containing Grafana notifiers configuration

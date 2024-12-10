@@ -1,0 +1,67 @@
+apiVersion: 1
+contactPoints:
+  - orgId: 1
+    name: "email receiver"
+    receivers:
+      - uid: "unique-id"
+        type: "email"
+        settings:
+          addresses: "alexei.shulha@gmail.com"
+        disableResolveMessage: false
+groups:
+    - orgId: 1
+      name: "Kubernetes Nodes Alerts"
+      folder: alerts
+      interval: 1m
+      rules:
+        - uid: "high-cpu-alert"
+          title: "High CPU Utilization"
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 60
+                to: 0
+              datasourceUid: prometheus
+              model:
+                editorMode: code
+                expr: avg(rate(node_cpu_seconds_total{mode='idle'}[5m])) by (instance)
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 0.2
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: NoData
+          execErrState: Error
+          for: 1m
+          annotations:
+            summary: Test
+          isPaused: false
+          notification_settings:
+            receiver: email receiver
