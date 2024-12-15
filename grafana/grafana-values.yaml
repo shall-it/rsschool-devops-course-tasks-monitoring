@@ -99,21 +99,21 @@ admin:
 smtp:
   ## @param smtp.enabled Enable SMTP configuration
   ##
-  enabled: false
+  enabled: true
   ## @param smtp.user SMTP user
   ##
-  user: user
+  # user: user
   ## @param smtp.password SMTP password
   ##
-  password: password
+  # password: password
   ## @param smtp.host Custom host for the smtp server
   ## e.g:
   ##   host: mysmtphost.com
   ##
-  host: ""
+  host: "smtp.gmail.com:587"
   ## @param smtp.fromAddress From address
   ##
-  fromAddress: ""
+  fromAddress: "awsdevrss@gmail.com"
   ## @param smtp.fromName From name
   ##
   fromName: ""
@@ -122,7 +122,7 @@ smtp:
   skipVerify: "false"
   ## @param smtp.existingSecret Name of existing secret containing SMTP credentials (user and password)
   ##
-  existingSecret: ""
+  existingSecret: "grafana-smtp-secret"
   ## @param smtp.existingSecretUserKey User key on the existing secret
   ##
   existingSecretUserKey: user
@@ -288,6 +288,7 @@ datasources:
       url: http://prometheus-server.monitoring.svc.cluster.local:9090
       access: proxy
       isDefault: true
+      uid: prometheus
 ## Create notifiers from a configMap
 ## The notifiersName must contain the files
 ## @param notifiers.configMapName Name of a ConfigMap containing Grafana notifiers configuration
@@ -298,7 +299,7 @@ notifiers:
 ## @param alerting.configMapName Name of a ConfigMap containing Grafana alerting configuration
 ##
 alerting:
-  configMapName: ""
+  configMapName: "grafana-alerting-config"
 ## @section Grafana Deployment parameters
 grafana:
   ## @param grafana.replicaCount Number of Grafana nodes

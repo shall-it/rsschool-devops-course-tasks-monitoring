@@ -41,3 +41,18 @@ https://github.com/rolling-scopes-school/tasks/blob/master/devops/modules/4_moni
 
 All these steps are completely automated with GitHub Actions and allow you to deploy Crafana with Prometheus as datasource and JSON layout file as dashboard to K8s cluster by Helm with execution of all required steps before.
 Important notice! Please do not forget to setup GHA credentials which used as environment variables.
+
+
+## Task 9
+https://github.com/rolling-scopes-school/tasks/blob/master/devops/modules/4_monitoring-configuration/task_9.md
+
+### To setup SMTP, Contact points and Alert rules in Grafana locally
+1. Create configmap based on grafana/alerts.yaml file
+`kubectl create configmap grafana-alerting-config -n monitoring --from-file=grafana/alerts.yaml`
+2. Create secret with Grafana SMTP credentials
+`kubectl create secret generic grafana-smtp-secret -n monitoring --from-literal=user="${{ secrets.SMTP_USER }}" --from-literal=password="${{ secrets.SMTP_PASSWORD }}"`
+3. Install or update Grafana release to apply new configuration
+`helm upgrade --install grafana bitnami/grafana --namespace monitoring -f grafana/grafana-values.yaml`
+
+All these steps are completely automated with GitHub Actions and allow you to apply Crafana SMTP, Contact points and Alert rules features into K8s cluster by Helm with execution of all required steps before.
+Important notice! Please do not forget to setup GHA credentials which used as environment variables.

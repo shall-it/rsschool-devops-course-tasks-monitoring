@@ -78,12 +78,31 @@ jobs:
             kubectl create configmap k8s-dashboard --from-file=grafana/1860_rev37.json -n monitoring
           fi
 
+      - name: Get or create configmap for Grafana Contact points and Alert rules
+        run: |
+          if kubectl get configmap grafana-alerting-config -n monitoring; then
+            echo "ConfigMap grafana-smtp-secret exists already"
+          else
+            kubectl create configmap grafana-alerting-config -n monitoring \
+              --from-file=grafana/alerts.yaml
+          fi
+
       - name: Get or create a separate secret for Grafana password
         run: |
           if kubectl get secret grafana-admin-secret -n monitoring; then
             echo "Secret grafana-admin-secret exists already"
           else
             kubectl create secret generic grafana-admin-secret -n monitoring --from-literal=password=$(openssl rand -base64 12)
+          fi
+
+      - name: Get or create secret for Grafana SMTP
+        run: |
+          if kubectl get secret grafana-smtp-secret -n monitoring; then
+            echo "Secret grafana-smtp-secret exists already"
+          else
+            kubectl create secret generic grafana-smtp-secret -n monitoring \
+              --from-literal=user="${{ secrets.SMTP_USER }}" \
+              --from-literal=password="${{ secrets.SMTP_PASSWORD }}"
           fi
 
       - name: Upgrade or Install Helm Chart 'grafana'
